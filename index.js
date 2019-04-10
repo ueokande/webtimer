@@ -1,5 +1,3 @@
-const color2 = '#E0E0E0';
-
 const colorAlert = '#FF70A6';
 const colorNormal = '#70D6FF'
 
@@ -45,6 +43,29 @@ if (!isNaN(paramValue)) {
 
 let startTime = Date.now();
 
+const updateFavicon = (value, color) => {
+  let favicon = document.querySelector('#favicon');
+
+  var canvas = document.createElement('canvas');
+  canvas.width = 16;
+  canvas.height = 16;
+
+  var context = canvas.getContext('2d');
+  var img = document.createElement('img');
+  img.crossOrigin = "Anonymous";
+  img.src = favicon.href;
+
+  // Draw Notification Circle
+  context.beginPath();
+  context.arc(16 / 2 , 16 / 2, 16 / 3, -Math.PI / 2, -Math.PI/2 + Math.PI * 2 * value);
+  context.lineWidth = 2;
+  context.strokeStyle = color;
+  context.stroke();
+
+  // Replace favicon
+  favicon.href = canvas.toDataURL('image/png');
+};
+
 const loop = () => {
   let rest = Math.min(Date.now() - startTime, maxMillis);
   let value = 1 - rest / maxMillis;
@@ -58,9 +79,11 @@ const loop = () => {
 
   let div = document.querySelector('#timer');
   if (value < .2) {
-    div.style.backgroundImage = backgroundImage(value, colorAlert, color2);
+    div.style.backgroundImage = backgroundImage(value, colorAlert, '#E0E0E0');
+    updateFavicon(value, colorAlert);
   } else {
-    div.style.backgroundImage = backgroundImage(value, colorNormal, color2);
+    div.style.backgroundImage = backgroundImage(value, colorNormal, '#E0E0E0');
+    updateFavicon(value, colorNormal);
   }
 
   if (rest <= 0) {
