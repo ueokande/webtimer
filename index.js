@@ -52,6 +52,7 @@ const loop = () => {
   let textCurrent = formatTime(maxMillis - rest);
   let textMax = formatTime(maxMillis);
 
+  document.title = `${textCurrent}/${textMax}`
   document.querySelector('#text-current').textContent = textCurrent;
   document.querySelector('#text-max').textContent = textMax;
 
