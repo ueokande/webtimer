@@ -41,8 +41,6 @@ if (!isNaN(paramValue)) {
   maxMillis = paramValue;
 }
 
-let startTime = Date.now();
-
 const updateFavicon = (value, color) => {
   let favicon = document.querySelector('#favicon');
 
@@ -55,22 +53,22 @@ const updateFavicon = (value, color) => {
   img.crossOrigin = "Anonymous";
   img.src = favicon.href;
 
-  // Draw Notification Circle
   context.beginPath();
   context.arc(16 / 2 , 16 / 2, 16 / 3, -Math.PI / 2, -Math.PI/2 + Math.PI * 2 * value);
   context.lineWidth = 2;
   context.strokeStyle = color;
   context.stroke();
 
-  // Replace favicon
   favicon.href = canvas.toDataURL('image/png');
 };
 
-const loop = () => {
-  let rest = Math.min(Date.now() - startTime, maxMillis);
-  let value = 1 - rest / maxMillis;
+let startTime = Date.now() - 1;
 
-  let textCurrent = formatTime(maxMillis - rest);
+const loop = () => {
+  let spent = Math.min(Date.now() - startTime, maxMillis);
+  let value = 1 - spent / maxMillis;
+
+  let textCurrent = formatTime(maxMillis - spent);
   let textMax = formatTime(maxMillis);
 
   document.title = `${textCurrent}/${textMax}`
@@ -86,10 +84,10 @@ const loop = () => {
     updateFavicon(value, colorNormal);
   }
 
-  if (rest <= 0) {
+  if (spent > maxMillis) {
     return;
   }
-  setTimeout(loop, 100)
-};
 
-setTimeout(loop, 100);
+  window.requestAnimationFrame(loop);
+};
+loop();
