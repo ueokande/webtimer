@@ -16,7 +16,7 @@ const backgroundImage = (value, colorBar, colorBack) => {
 
 const formatTime = (millis) => {
   let min = Math.floor(millis / 1000 / 60)
-  let sec = Math.floor(millis / 1000 % 60)
+  let sec = Math.ceil(millis / 1000 % 60)
   if (sec < 10) {
     return `${min}:0${sec}`;
   } else {
